@@ -1,4 +1,7 @@
 # Siete y Media: Dynamic Programming Analysis
+https://colab.research.google.com/assets/colab-badge.svg](
+https://colab.research.google.com/github/drfperez/7ymedio/blob/main/7ymedio.ipynb
+)
 
 Python implementation of exact dynamic programming solutions for the Spanish card game **Siete y Media**, including optimal stopping rules, competitive play, Nash equilibrium analysis, and finite-deck card counting.
 
