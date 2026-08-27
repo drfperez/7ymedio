@@ -1,5 +1,5 @@
 # Siete y Media: Dynamic Programming Analysis
-https://colab.research.google.com/assets/colab-badge.svg](
+[https://colab.research.google.com/assets/colab-badge.svg](
 https://colab.research.google.com/github/drfperez/7ymedio/blob/main/7ymedio.ipynb
 )
 
