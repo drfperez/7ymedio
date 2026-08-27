@@ -1,9 +1,7 @@
 # Siete y Media: Dynamic Programming Analysis
 
-
-https://img.shields.io/badge/Python-3.9%2B-blue](https://www.python.org/)
-https://img.shields.io/badge/License-MIT-green](LICENSE)
-
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 Python implementation of exact dynamic programming solutions for the Spanish card game **Siete y Media**, including optimal stopping rules, competitive play, Nash equilibrium analysis, and finite-deck card counting.
 
