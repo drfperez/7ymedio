@@ -1,13 +1,21 @@
 # Siete y Media: Dynamic Programming Analysis
 
+https://img.shields.io/badge/Python-3.9%2B-blue
+https://img.shields.io/badge/License-MIT-green
+
 Python implementation of exact dynamic programming solutions for the Spanish card game **Siete y Media**, including optimal stopping rules, competitive play, Nash equilibrium analysis, and finite-deck card counting.
 
-## Run the Notebook in Google Colab
+## Associated Paper
+
+**Why Four? And Why Five? Optimal Play in Siete y Media**
+
+This repository contains the Python code used to generate all computational results reported in the accompanying manuscript.
+
+## 🚀 Run the Notebook in Google Colab
 
 Open and run the complete analysis directly in your browser:
 
 https://colab.research.google.com/github/drfperez/7ymedio/blob/main/7ymedio.ipynb
-
 
 ## Overview
 
