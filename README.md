@@ -1,196 +1,142 @@
 # Siete y Media: Dynamic Programming Analysis
 
-This repository contains a complete Python implementation of the analyses presented in:
-
-> **Why Four? And Why Five? Optimal Play in Siete y Media**
-
-The notebook computes all results exactly using dynamic programming. No Monte Carlo simulation is used.
-
----
+Python implementation of exact dynamic programming solutions for the Spanish card game **Siete y Media**, including optimal stopping rules, competitive play, Nash equilibrium analysis, and finite-deck card counting.
 
 ## Overview
 
-Siete y Media ("Seven and a Half") is a traditional Spanish card game played with a 40-card Spanish deck.
+Siete y Media ("Seven and a Half") is played with a 40-card Spanish deck.
 
 Card values:
 
 - Face cards (Jack, Knight, King): 0.5 points
-- Cards 1 through 7: face value
+- Cards 1–7: face value
 
-The objective is to obtain a score as close as possible to **7.5** without exceeding it.
+The goal is to get as close as possible to **7.5** without exceeding it.
 
-This notebook studies three mathematical models:
+This notebook analyzes three settings:
 
-1. **Infinite deck, expected-score maximization**
-2. **Competitive play (win-probability maximization)**
-3. **Finite deck (without replacement)**
+1. Infinite deck (with replacement)
+2. Competitive play (maximize win probability)
+3. Finite deck (without replacement)
+
+All results are computed exactly using dynamic programming.
 
 ---
 
-# Part I: Infinite Deck
+## Part I: Infinite Deck
 
-## Objective
+### Objective
 
 Maximize expected final score.
 
-At each score $$x$$, the player may:
+At each decision point, a player can:
 
-- **Stand** and keep score $$x$$
-- **Hit** and draw another card
+- **Stand** and keep the current score.
+- **Hit** and draw another card.
 
-The notebook solves the Bellman equation
+The Bellman equation is solved exactly.
 
-$$
-V(x)
-=
-\max
-\left\{
-x,
-\sum_c p(c)V(x+c)
-\right\}.
-$$
+### Main Result
 
-Busts contribute zero.
+Optimal policy:
 
-## Main Result
+- Hit if score < 4.0
+- Stand if score ≥ 4.0
 
-The optimal policy is:
+Expected value from the start:
 
-- **Hit** if $$x < 4.0$$
-- **Stand** if $$x \ge 4.0$$
+```text
+V(0) = 4.75112192
+```
 
-This produces
-
-$$
-V(0)
-=
-4.75112192.
-$$
-
-This result is known in the paper as the **Rule of Four**.
+This optimal stopping rule is called the **Rule of Four**.
 
 ---
 
-# Part II: Competitive Play
+## Part II: Competitive Play
 
-## Objective
+### Objective
 
-Maximize the probability of winning against another player.
+Maximize the probability of defeating an opponent.
 
-The opponent follows a threshold strategy $$T_{opp}$$.
+The opponent follows a threshold strategy and the player computes the optimal response.
 
 The notebook computes:
 
-1. Opponent final-score distributions.
-2. Best-response policies.
-3. Optimal stopping thresholds.
-4. Win probabilities.
+- Opponent score distributions
+- Best-response policies
+- Win probabilities
+- Threshold equilibria
 
-The value function becomes
+### Main Results
 
-$$
-W(x)
-=
-\max
-\left\{
-R(x),
-\sum_c p(c)W(x+c)
-\right\},
-$$
+Against an opponent using:
 
-where $$R(x)$$ is the probability of winning by standing at score $$x$$.
+```text
+Threshold = 4.0
+```
 
-## Main Result
+the optimal response is:
 
-Against an opponent using threshold
+```text
+Threshold = 5.0
+```
 
-$$
-T_{opp}=4.0,
-$$
+with
 
-the optimal response is
+```text
+P(win) = 0.502284
+```
 
-$$
-T_{player}=5.0.
-$$
-
-with win probability
-
-$$
-P(\text{win}) = 0.502284.
-$$
-
-Competition rewards additional risk, shifting behavior from the Rule of Four to a Rule of Five.
+Competition rewards additional risk and shifts behavior from the Rule of Four to a **Rule of Five**.
 
 ---
 
-# Nash Equilibrium Analysis
+## Nash Equilibrium Analysis
 
 The notebook explicitly computes:
 
-- Threshold payoffs
+- Payoff matrices
 - Best-response correspondences
 - Symmetric fixed points
 
-A threshold $$T^*$$ is a symmetric equilibrium if
+### Main Result
 
-$$
-T^* \in BR(T^*).
-$$
+The unique symmetric equilibrium within the class of pure threshold strategies is:
 
-## Result
+```text
+T* = 5.0
+```
 
-The unique symmetric equilibrium within the class of pure threshold strategies is
+with
 
-$$
-T^* = 5.0.
-$$
+```text
+P(win | 5.0, 5.0) = 0.500000
+```
 
-The notebook verifies:
-
-$$
-P(\text{win}\mid 5,5)=0.5,
-$$
-
-and finds no profitable threshold deviation.
+No profitable threshold deviation exists against an opponent using threshold 5.0.
 
 ---
 
-# Part III: Finite Deck
+## Part III: Finite Deck
 
-## Objective
+### Objective
 
-Analyze optimal play without replacement.
+Analyze optimal play when cards are drawn without replacement.
 
-State variables consist of:
+The state consists of:
 
 - Current score
 - Remaining deck composition
 
-The notebook solves
+The notebook solves the finite dynamic program exactly using memoized recursion.
 
-$$
-V(x,c)
-=
-\max
-\left\{
-x,
-\sum_i
-\frac{c_i}{N}
-V(x+v_i,c-e_i)
-\right\}
-$$
+### Full Deck Result
 
-using memoized dynamic programming.
+Initial deck composition:
 
----
-
-## Full Deck Result
-
-Initial deck:
-
-| Card Value | Count |
-|------------|--------|
+| Value | Count |
+|---------|---------|
 | 0.5 | 12 |
 | 1 | 4 |
 | 2 | 4 |
@@ -202,17 +148,15 @@ Initial deck:
 
 Result:
 
-$$
-V(0)
-=
-4.74075121
-$$
+```text
+V(0) = 4.74075121
+```
 
-with optimal threshold
+Optimal threshold:
 
-$$
-T^*=4.0.
-$$
+```text
+T* = 4.0
+```
 
 ---
 
@@ -222,73 +166,71 @@ $$
 
 Removed cards:
 
-- 6
-- 7
+```text
+6 and 7
+```
 
 Result:
 
-- Threshold = 4.0
-- $$V(0)=4.862246$$
+```text
+Threshold = 4.0
+V(0) = 4.862246
+```
 
 ### High-Rich Deck
 
 Removed cards:
 
-- 0.5
-- 1
-- 2
+```text
+0.5, 1, and 2
+```
 
 Result:
 
-- Threshold = 3.0
-- $$V(0)=5.000000$$
+```text
+Threshold = 3.0
+V(0) = 5.000000
+```
 
 ---
 
-# Main Conclusions
-
-The notebook demonstrates how changing the objective function changes optimal behavior:
+## Summary of Results
 
 | Setting | Objective | Optimal Threshold |
-|----------|------------|------------------|
+|----------|----------|----------|
 | Infinite Deck | Maximize expected score | 4.0 |
 | Competitive Play | Maximize win probability | 5.0 |
 | Finite Deck | Depends on composition | 3.0–4.0 |
 
-Key lesson:
+Key insight:
 
-> The underlying card game remains the same, but optimal decisions depend strongly on the payoff structure.
-
-Risk-neutral score maximization favors stopping at **4**.
-
-Head-to-head competition rewards additional variance and moves the equilibrium threshold to **5**.
+> The same card game produces different optimal strategies when the objective function changes. Score maximization favors stopping at four, while head-to-head competition favors stopping at five.
 
 ---
 
-# Computational Method
-
-All reported values are computed exactly via dynamic programming.
+## Computational Method
 
 The notebook uses:
 
+- Dynamic programming
 - Backward induction
-- Recursive dynamic programming
+- Bellman equations
 - Memoization (`functools.lru_cache`)
 - Exact probability calculations
 
-No simulation-based estimates are used.
+No Monte Carlo simulation is used.
 
 ---
 
-# Requirements
+## Requirements
 
-Install:
+Install dependencies:
 
 ```bash
 pip install numpy pandas
 ```
 
-Python version:
+Supported versions:
 
 ```text
 Python 3.9+
@@ -296,7 +238,7 @@ Python 3.9+
 
 ---
 
-# Running
+## Running
 
 Open the notebook in:
 
@@ -306,47 +248,59 @@ Open the notebook in:
 
 Run all cells sequentially.
 
-The notebook prints:
+The notebook generates:
 
-- Part I value tables
+- Infinite-deck value tables
 - Best-response tables
 - Nash equilibrium analysis
 - Finite-deck computations
-- Final summary tables
+- Summary tables
 
 ---
 
-# Reproducibility
+## Reproducibility
 
-All numerical values reported in the accompanying paper are generated directly from this notebook.
+All numerical results reported in the accompanying paper are generated directly from this notebook.
 
-Notable outputs:
+Key outputs:
 
 ```text
-V(0) infinite deck = 4.75112192
+Infinite deck:
+V(0) = 4.75112192
+Threshold = 4.0
 ```
 
 ```text
-Best response to Topp = 4.0 is Tplayer = 5.0
+Competitive model:
+Best response to 4.0 = 5.0
+P(win) = 0.502284
 ```
 
 ```text
-Symmetric equilibrium threshold = 5.0
+Nash equilibrium:
+T* = 5.0
+P(win | 5.0, 5.0) = 0.500000
 ```
 
 ```text
-Finite-deck V(0) = 4.74075121
+Finite deck:
+V(0) = 4.74075121
+Threshold = 4.0
 ```
 
 ---
 
-# Author
-
-Prepared for the study:
+## Associated Paper
 
 **Why Four? And Why Five? Optimal Play in Siete y Media**
 
-Dynamic programming implementation in Python.
+This repository contains the code used to generate the computational results appearing in the manuscript.
+
+---
+
+## License
+
+MIT License
 
 
 
